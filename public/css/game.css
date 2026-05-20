@@ -1,0 +1,1078 @@
+@import url('https://fonts.cdnfonts.com/css/ninja-naruto');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-orange: hsl(25, 100%, 55%);
+    --chakra-blue: hsl(180, 100%, 50%);
+    --accent-red: hsl(0, 100%, 50%);
+    --surface: rgba(0, 0, 0, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    margin: 0;
+    background: #050505 url('/assets/battlefield_bg.png') no-repeat center center;
+    background-size: cover;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+#played-card-dim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 20;
+    transition: opacity 0.18s ease, background 0.18s ease;
+}
+
+body.showing-played-card #played-card-dim {
+    background: rgba(0, 0, 0, 0.72);
+    opacity: 1;
+}
+
+#game-container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: clamp(6px, 1.5vh, 12px);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: clamp(6px, 1.5vh, 12px);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.player-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(6px, 1vh, 10px);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.player-zone.active-turn {
+    filter: drop-shadow(0 0 30px hsla(180, 100%, 50%, 0.2));
+}
+
+.player-zone.opponent {
+    transform: scale(0.96);
+}
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+    padding: 8px clamp(12px, 2vw, 20px);
+    border-radius: 100px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+
+    flex-shrink: 0;
+    max-width: 260px;
+}
+
+.avatar-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-container.hp-hit {
+    animation: hp-hit-shake 0.42s ease;
+}
+
+.avatar {
+    width: clamp(40px, 6vh, 60px);
+    height: clamp(40px, 6vh, 60px);
+    border-radius: 50%;
+    border: 3px solid var(--primary-orange);
+    object-fit: cover;
+    box-shadow: 0 0 20px var(--primary-orange);
+}
+
+.avatar-container.hp-hit .avatar {
+    animation: hp-hit-flash 0.42s ease;
+}
+
+.player-bottom-row,
+.opponent-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    max-width: 1400px;
+}
+
+.hp-bar {
+    margin-top: 5px;
+    font-family: 'Ninja Naruto', sans-serif;
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    color: #4ade80;
+    text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.hp-bar.hp-pop {
+    animation: hp-pop 0.42s ease;
+}
+
+.hp-bar.low {
+    color: var(--accent-red);
+    animation: critical 1s infinite alternate;
+}
+
+@keyframes critical {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+@keyframes hp-hit-shake {
+    0% {
+        transform: translateX(0) scale(1);
+    }
+
+    20% {
+        transform: translateX(-6px) scale(1.02);
+    }
+
+    40% {
+        transform: translateX(6px) scale(1.02);
+    }
+
+    60% {
+        transform: translateX(-4px) scale(1.01);
+    }
+
+    80% {
+        transform: translateX(4px) scale(1.01);
+    }
+
+    100% {
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes hp-hit-flash {
+    0% {
+        filter: brightness(1) saturate(1);
+        transform: scale(1);
+    }
+
+    35% {
+        filter: brightness(1.7) saturate(1.35);
+        transform: scale(1.08);
+        box-shadow: 0 0 26px rgba(255, 60, 60, 0.95);
+    }
+
+    100% {
+        filter: brightness(1) saturate(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes hp-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.22);
+        color: #ffffff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.chakra-bar {
+    margin-top: 3px;
+    font-family: 'Ninja Naruto', sans-serif;
+    font-size: clamp(0.8rem, 1.2vw, 1.1rem);
+    color: #3b82f6;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info h3 {
+    margin: 0;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    color: var(--primary-orange);
+}
+
+.timer {
+    font-family: 'Ninja Naruto', sans-serif;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    color: #fbbf24;
+    text-align: center;
+}
+
+.table-cards {
+    min-height: clamp(75px, min(16vw, 15vh), 180px);
+    width: min(100%, 1080px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.table-cards:empty::before {
+    content: 'Battleground';
+    opacity: 0.2;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 0.8rem;
+}
+
+.hand,
+.hand-mini {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    padding: 4px 0;
+    overflow: visible;
+}
+
+#player-hand {
+    display: flex;
+    justify-content: flex-start;
+    gap: clamp(4px, 1vw, 8px);
+    position: relative;
+    max-width: 100%;
+}
+
+#player-hand,
+#opp-hand {
+    flex: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    overflow: visible;
+    padding: 18px 0;
+
+    justify-content: center;
+    padding-left: 0;
+
+    min-width: 0;
+}
+
+#player-hand .card,
+#opp-hand .card {
+    margin-left: 0;
+}
+
+#player-hand .card:first-child,
+#opp-hand .card:first-child {
+    margin-left: 0;
+}
+
+.card {
+    width: clamp(80px, 9.5vw, 130px);
+    aspect-ratio: 5 / 7;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    isolation: isolate;
+    flex-shrink: 0;
+}
+
+.card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.82) 100%);
+    z-index: 1;
+}
+
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6px;
+    z-index: 2;
+}
+
+.card-top {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chakra-cost {
+    background: rgba(0, 0, 0, 0.72);
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-size: clamp(0.55rem, 0.9vw, 0.9rem);
+    font-weight: 700;
+    color: #fbbf24;
+    backdrop-filter: blur(4px);
+}
+
+.card-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.72), transparent);
+    margin: -6px;
+    margin-top: auto;
+    padding: 28px 6px 6px 6px;
+}
+
+.card-name {
+    font-family: 'Ninja Naruto', sans-serif;
+    font-size: clamp(0.5rem, 0.75vw, 0.85rem);
+    line-height: 1.1;
+    text-align: center;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+    min-height: 2.2em;
+
+    hyphens: auto;
+}
+
+.card-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    width: 100%;
+}
+
+.card-stats span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 18px;
+    padding: 2px 3px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(3px);
+    font-size: clamp(0.45rem, 0.7vw, 0.72rem);
+    font-weight: 700;
+    text-shadow: 0 1px 2px black;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 1;
+    text-align: center;
+}
+
+.card-stats {
+    max-height: 42px;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.card-stats::-webkit-scrollbar {
+    display: none;
+}
+
+.stat-cost {
+    color: #fbbf24;
+    font-weight: 900;
+    text-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding-right: 4px;
+    margin-right: 2px;
+}
+
+.card.back {
+    background-image: url('/assets/cards/back.png');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #555;
+}
+
+.meditation-btn {
+    display: none;
+    margin-top: 6px;
+    padding: 6px 12px;
+    background-color: #2b7a78;
+    color: #ffffff;
+    border: 2px solid #3aafa9;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: clamp(10px, 1.5vh, 14px);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.meditation-btn:hover:not(:disabled) {
+    background-color: #3aafa9;
+    border-color: #feffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(58, 175, 169, 0.4);
+}
+
+.meditation-btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.meditation-btn:disabled,
+.meditation-btn.disabled-btn {
+    background-color: #333333 !important;
+    border-color: #555555 !important;
+    color: #888888 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+    opacity: 0.6;
+}
+
+.shield-marker {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.6rem;
+    font-weight: bold;
+    border: 1px solid white;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.battle-stage {
+    position: relative;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    background: transparent;
+    border: none;
+}
+
+#battle-log {
+    position: relative;
+    width: 100%;
+    max-height: clamp(60px, 10vh, 90px);
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    padding: 8px 12px;
+    border-radius: 12px;
+    border-left: 3px solid var(--primary-orange);
+    font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+    color: #cbd5e1;
+    pointer-events: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    box-sizing: border-box;
+}
+
+#battle-log::-webkit-scrollbar {
+    display: none;
+}
+
+#battle-log p {
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+body.showing-played-card #game-container {
+    z-index: 40;
+}
+
+#active-card-zone {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 9999;
+    padding-bottom: clamp(40px, 8vh, 120px);
+    box-sizing: border-box;
+}
+
+#active-card-zone .card {
+    width: clamp(120px, min(35vw, 25vh), 250px);
+    aspect-ratio: 5 / 7;
+    height: auto;
+    opacity: 0;
+    transform: scale(0.84) translateY(22px);
+    transition: transform 0.26s ease, opacity 0.26s ease;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+    z-index: 50;
+}
+
+#active-card-zone .card.is-visible {
+    opacity: 1;
+    transform: scale(1.16);
+}
+
+#active-card-zone .card.is-visible .card-description {
+    font-size: clamp(0.7rem, 2vh, 1.4rem);
+    line-height: 1.3;
+    max-width: 90%;
+    padding: 6px;
+    text-align: center;
+}
+
+#active-card-zone .played-card::after {
+    content: none;
+    display: none;
+}
+
+#active-card-zone .played-card {
+    filter: none;
+    z-index: 45;
+}
+
+.game-card-container {
+    perspective: 1000px;
+    width: clamp(45px, min(12vw, 9vh), 120px);
+    height: clamp(63px, min(16.8vw, 12.6vh), 168px);
+    cursor: pointer;
+}
+
+.game-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform-style: preserve-3d;
+}
+
+.game-card-container.flipped .game-card-inner {
+    transform: rotateY(180deg);
+}
+
+.game-card-front,
+.game-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.game-card-front {
+    background: linear-gradient(135deg, rgba(10, 10, 40, 0.8), rgba(30, 20, 60, 0.8));
+    z-index: 2;
+}
+
+.game-card-back {
+    background: linear-gradient(135deg, rgba(40, 20, 10, 0.8), rgba(60, 30, 10, 0.8));
+    transform: rotateY(180deg);
+    justify-content: center;
+    align-items: center;
+}
+
+.card-background-pattern {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+.card-character-image {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 55%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+    z-index: 2;
+}
+
+.card-skill {
+    display: none;
+    font-size: 0.65rem;
+    color: var(--text-main);
+    text-align: center;
+    opacity: 0.8;
+}
+
+.card-skill p {
+    margin: 0;
+}
+
+.game-card-container:hover .card-skill {
+    display: block;
+}
+
+.card-shirt-design {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-shirt-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+}
+
+.card-shirt-emblem {
+    font-size: clamp(1.5rem, 3vh, 3rem);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.card-shirt-text {
+    font-family: 'Ninja Naruto', sans-serif;
+    font-size: clamp(0.7rem, 1.5vh, 1.2rem);
+    color: var(--primary-orange);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    margin: 0;
+}
+
+.game-card-container {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.game-card-container:hover {
+    transform: translateY(-15px) scale(1.1);
+    filter: drop-shadow(0 10px 20px rgba(255, 255, 255, 0.2));
+}
+
+.game-card-container:active {
+    transform: translateY(-10px) scale(1.02);
+}
+
+.victory-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.victory-content {
+    background: linear-gradient(135deg, rgba(20, 10, 5, 0.95), rgba(40, 20, 10, 0.95));
+    border: 2px solid var(--primary-orange);
+    border-radius: 20px;
+    padding: clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 4vw, 4rem);
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255, 140, 0, 0.3), inset 0 0 20px rgba(255, 140, 0, 0.1);
+    transform: scale(0.8);
+    animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    width: 90%;
+    max-width: 500px;
+    box-sizing: border-box;
+}
+
+.victory-title {
+    font-family: 'Ninja Naruto', sans-serif;
+    color: var(--accent-red);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    margin: 0 0 1rem 0;
+    text-shadow: 0 4px 15px rgba(255, 0, 0, 0.5);
+    letter-spacing: 2px;
+}
+
+.victory-subtitle {
+    color: #a0a0a0;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+.winner-name {
+    font-family: 'Ninja Naruto', sans-serif;
+    color: var(--primary-orange);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin: 0.5rem 0 2rem 0;
+    text-shadow: 0 0 20px var(--primary-orange);
+    letter-spacing: 3px;
+}
+
+.victory-btn {
+    background: linear-gradient(135deg, var(--primary-orange), #ff4500);
+    color: white;
+    border: none;
+    padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 3rem);
+    font-family: 'Ninja Naruto', sans-serif;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(255, 69, 0, 0.4);
+}
+
+.victory-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(255, 69, 0, 0.6);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popUp {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes drawCard {
+    from {
+        transform: translateY(100px) rotate(10deg) scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) rotate(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.shake {
+    animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+@media (max-width: 768px) {
+    .stats {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 6px 12px;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.85);
+    }
+
+    .info {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .avatar-container {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .meditation-btn {
+        margin-top: 0;
+        margin-left: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    #game-container {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        gap: 2px !important;
+    }
+
+    .player-zone {
+        flex: 0 0 auto !important;
+    }
+
+    #player-hand,
+    #opp-hand {
+        justify-content: center !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        overflow: hidden !important;
+    }
+
+    #player-hand .card,
+    #opp-hand .card {
+        margin-left: 0 !important;
+    }
+
+    #player-hand .card:first-child,
+    #opp-hand .card:first-child {
+        margin-left: 0 !important;
+    }
+
+    .card {
+        width: clamp(52px, 15vw, 72px) !important;
+    }
+
+    .player-bottom-row,
+    .opponent-top-row {
+        flex-direction: column !important;
+        gap: 8px !important;
+        align-items: center !important;
+    }
+
+    .battle-stage {
+        flex: 1 1 auto !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+    }
+
+    .table-cards:empty::before {
+        display: none;
+    }
+
+    .table-cards {
+        min-height: 70px !important;
+        flex: 0 0 auto !important;
+    }
+
+    .card-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hp-bar,
+    .chakra-bar {
+        font-size: 0.6rem !important;
+        letter-spacing: -0.5px;
+    }
+
+    .info h3 {
+        font-size: 0.65rem !important;
+    }
+
+    .timer {
+        font-size: 0.7rem !important;
+    }
+
+    .stats {
+        padding: 2px 6px !important;
+        gap: 4px !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    #battle-log {
+        font-size: 0.65rem !important;
+        line-height: 1.2 !important;
+        padding: 4px !important;
+    }
+
+    .card-name {
+        font-size: 0.4rem !important;
+    }
+
+    .stat-item {
+        padding: 1px !important;
+        gap: 0 !important;
+    }
+
+    .stat-icon {
+        font-size: 0.55rem !important;
+    }
+
+    .stat-value {
+        font-size: 0.5rem !important;
+    }
+
+    .shield-marker {
+        width: 14px !important;
+        height: 14px !important;
+        font-size: 0.45rem !important;
+        top: 2px !important;
+        right: 2px !important;
+    }
+
+    .card-character-name {
+        font-size: 0.45rem !important;
+        margin: 0 !important;
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .card:hover {
+        transform: translateY(-10px) scale(1.08);
+        z-index: 100;
+        border-color: var(--chakra-blue);
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 255, 255, 0.35);
+    }
+}
+
+@media (max-width: 1024px) {
+    .card {
+        width: clamp(75px, 11vw, 125px);
+    }
+
+    .table-cards {
+        min-height: clamp(65px, 12vw, 140px);
+        padding: 4px;
+    }
+
+    .stats {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 6px 12px;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.85);
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .stats::-webkit-scrollbar {
+        display: none;
+    }
+
+    .info {
+        flex-direction: row;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .avatar-container {
+        flex-direction: row;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .meditation-btn {
+        margin-top: 0;
+        margin-left: 8px;
+        flex-shrink: 0;
+    }
+
+    #battle-log {
+        max-height: 70px;
+        padding: 6px 10px;
+    }
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/game.css">
+    <title>Ninja Mayhem - Battlefield</title>
+</head>
+
+<body>
+    <div id="played-card-dim" hidden></div>
+    <div id="game-container">
+
+        <div class="player-zone opponent" id="opponent-zone">
+            <div class="opponent-top-row">
+                <div class="stats">
+                    <div class="avatar-container">
+                        <img src="/assets/avatars/default_user.png" id="opp-avatar" class="avatar">
+                        <div class="hp-bar"><span id="opp-hp">10</span> HP</div>
+                        <div class="chakra-bar"><span id="opp-chakra">0</span> Chakra Points</div>
+                    </div>
+                    <div class="info">
+                        <h3 id="opp-name">Opponent</h3>
+                        <div id="opp-timer" class="timer">30s</div>
+                    </div>
+                </div>
+
+                <div class="hand-mini" id="opp-hand"></div>
+            </div>
+
+            <div class="table-cards" id="opp-table"></div>
+        </div>
+
+        <div class="battle-stage">
+            <div id="battle-log"></div>
+        </div>
+
+
+        <div class="player-zone player" id="player-zone">
+            <div class="table-cards" id="player-table"></div>
+
+            <div class="player-bottom-row">
+                <div class="stats">
+                    <div class="info">
+                        <h3 id="player-name">
+                            <%= user.nickname || user.login %>
+                        </h3>
+                        <div id="player-timer" class="timer">30s</div>
+                        <button id="meditation-btn" class="meditation-btn">
+                            Meditate (pass turn)
+                        </button>
+                    </div>
+
+                    <div class="avatar-container">
+                        <img src="/assets/avatars/<%= user.avatar %>" id="player-avatar" class="avatar">
+
+                        <div class="hp-bar">
+                            <span id="player-hp">10</span> HP
+                        </div>
+
+                        <div class="chakra-bar">
+                            <span id="player-chakra">0</span> Chakra Points
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hand" id="player-hand"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="active-card-zone"></div>
+
+    <div id="victory-modal" class="victory-overlay">
+        <div class="victory-content">
+            <h1 class="victory-title">Fight over!</h1>
+            <p class="victory-subtitle">Winner:</p>
+            <h2 id="winner-name" class="winner-name">Shinobi</h2>
+            <button id="return-lobby-btn" class="victory-btn">Return to Lobby</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const USER_ID = "<%= user.id %>";
+    </script>
+    <script src="/js/client.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<div id="errorModal" class="error-modal-overlay" style="display: none;">
+    <div class="error-modal-content">
+        <div class="error-modal-header">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <img src="/assets/ui/error.png" alt="error" class="error-icon" style="width:36px;height:36px;"/>
+                <h2>Error</h2>
+            </div>
+            <button class="error-modal-close" onclick="closeErrorModal()">&times;</button>
+        </div>
+        <div class="error-modal-body" id="errorMessage">
+
+        </div>
+        <div class="error-modal-footer">
+            <button class="error-modal-btn" onclick="closeErrorModal()">OK</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showErrorModal(message) {
+        document.getElementById('errorMessage').textContent = message;
+        document.getElementById('errorModal').style.display = 'flex';
+    }
+
+    function closeErrorModal() {
+        document.getElementById('errorModal').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('errorModal');
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeErrorModal();
+            }
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorMsg = urlParams.get('error');
+        if (errorMsg) {
+            showErrorModal(decodeURIComponent(errorMsg));
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        const message = urlParams.get('message');
+        if (message) {
+            showErrorModal(decodeURIComponent(message));
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeErrorModal();
+        }
+    });
+</script>

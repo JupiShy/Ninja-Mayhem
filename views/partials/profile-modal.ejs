@@ -1,0 +1,186 @@
+<style>
+    .avatar-edit-btn:hover {
+        transform: scale(1.1) rotate(5deg) !important;
+        background: var(--primary-orange) !important;
+        border-color: var(--surface-dark) !important;
+        box-shadow: 0 0 15px var(--primary-orange) !important;
+    }
+
+    .avatar-edit-btn:hover .material-symbols-outlined {
+        color: var(--surface-dark) !important;
+    }
+</style>
+<div id="profile-modal" class="auth-container profile-modal"
+    style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; width: 450px;">
+    <button onclick="toggleProfile()"
+        style="position: absolute; top: 1rem; right: 1rem; width: auto; background: none; box-shadow: none; padding: 0; margin: 0; color: var(--text-dim);">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <h2 style="margin-bottom: 2rem; color: var(--primary-orange);">Ninja Profile</h2>
+
+    <div class="profile-content">
+        <div style="position: relative; display: inline-block; margin-bottom: 2rem;">
+            <img id="profile-avatar-img" src="/assets/avatars/<%= user.avatar %>" alt="Avatar"
+                style="width: 150px; height: 150px; border-radius: 24px; border: 3px solid var(--primary-orange); box-shadow: 0 0 20px var(--primary-orange-glow); object-fit: cover;">
+            <input type="file" id="edit-avatar-input" style="display: none;" accept="image/*"
+                onchange="uploadAvatar(this)">
+            <label for="edit-avatar-input" class="avatar-edit-btn"
+                style="position: absolute; bottom: -5px; right: -5px; background: var(--surface-dark); border: 2px solid var(--primary-orange); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 10px var(--primary-orange-glow); transition: all 0.3s ease;">
+                <span class="material-symbols-outlined"
+                    style="font-size: 1.2rem; color: var(--primary-orange);">edit</span>
+            </label>
+        </div>
+
+        <div id="nickname-display-area" style="margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <h3 id="profile-nickname" style="font-size: 1.8rem; margin: 0;">
+                    <%= user.nickname || user.login %>
+                </h3>
+                <span class="material-symbols-outlined" style="cursor: pointer; color: var(--primary-orange);"
+                    onclick="enableEditMode()">edit</span>
+            </div>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">@<%= user.login %>
+            </p>
+        </div>
+
+        <div id="nickname-edit-area" style="display: none; margin-bottom: 1.5rem;">
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <input type="text" id="edit-nickname-input" value="<%= user.nickname || user.login %>"
+                    style="margin: 0;">
+                <button onclick="saveNickname()"
+                    style="width: auto; margin: 0; padding: 0.8rem; background: transparent;"><span
+                        class="material-symbols-outlined">save</span></button>
+                <button onclick="disableEditMode()"
+                    style="width: auto; margin: 0; padding: 0.8rem; background: transparent; "><span
+                        class="material-symbols-outlined">cancel</span></button>
+            </div>
+        </div>
+
+        <div
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--glass-border);">
+            <div
+                style="background: rgba(74, 222, 128, 0.1); padding: 1rem; border-radius: 12px; border: 1px solid rgba(74, 222, 128, 0.2);">
+                <p style="color: #4ade80; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">
+                    Victories</p>
+                <h4 style="font-size: 1.5rem; color: #4ade80;">
+                    <%= user.wins || 0 %>
+                </h4>
+            </div>
+            <div
+                style="background: rgba(248, 113, 113, 0.1); padding: 1rem; border-radius: 12px; border: 1px solid rgba(248, 113, 113, 0.2);">
+                <p style="color: #f87171; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Defeats
+                </p>
+                <h4 style="font-size: 1.5rem; color: #f87171;">
+                    <%= user.losses || 0 %>
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleProfile(event) {
+        if (event) event.stopPropagation();
+        const modal = document.getElementById('profile-modal');
+        const isVisible = modal.style.display === 'block';
+        modal.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) disableEditMode();
+    }
+
+    function enableEditMode() {
+        document.getElementById('nickname-display-area').style.display = 'none';
+        document.getElementById('nickname-edit-area').style.display = 'block';
+        document.getElementById('edit-nickname-input').focus();
+    }
+
+    function disableEditMode() {
+        document.getElementById('nickname-display-area').style.display = 'block';
+        document.getElementById('nickname-edit-area').style.display = 'none';
+    }
+
+    async function saveNickname() {
+        const nicknameInput = document.getElementById('edit-nickname-input');
+        const nickname = nicknameInput.value.trim();
+        if (!nickname) return alert('Enter your ninja name!');
+
+        try {
+            const response = await fetch('/update-nickname', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nickname })
+            });
+
+            if (!response.ok) {
+                const text = await response.text();
+                console.error('Server error:', response.status, text);
+                if (response.status === 401) {
+                    alert('Session expired. Please log in again.');
+                    window.location.href = '/login';
+                    return;
+                }
+                throw new Error(`Server returned ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('display-nickname').innerText = data.nickname;
+                document.getElementById('profile-nickname').innerText = data.nickname;
+                disableEditMode();
+            } else {
+                alert('Failed to update scroll: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            alert('Connection to the village lost! Check the scroll (console) for details.');
+        }
+    }
+
+    async function uploadAvatar(input) {
+        if (!input.files || !input.files[0]) return;
+
+        const file = input.files[0];
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        try {
+            const response = await fetch('/update-avatar', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert('Session expired. Please log in again.');
+                    window.location.href = '/login';
+                    return;
+                }
+                throw new Error(`Server returned ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('profile-avatar-img').src = '/assets/avatars/' + data.avatar;
+
+                const headerAvatar = document.querySelector('.user-avatar');
+                if (headerAvatar) {
+                    headerAvatar.src = '/assets/avatars/' + data.avatar;
+                }
+            } else {
+                alert('Failed to update avatar scroll: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Avatar upload error:', error);
+            alert('Connection to the village lost! Check the scroll (console) for details.');
+        }
+    }
+
+    window.onclick = function (event) {
+        const modal = document.getElementById('profile-modal');
+        if (event.target == modal) {
+            toggleProfile();
+        }
+    }
+
+    document.getElementById('openProfile').onclick = toggleProfile;
+</script>

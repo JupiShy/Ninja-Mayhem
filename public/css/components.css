@@ -1,0 +1,147 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface-dark);
+    backdrop-filter: blur(10px);
+    padding: 1rem 5%;
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    border: 2px solid var(--primary-orange);
+    object-fit: cover;
+    box-shadow: 0 0 10px var(--primary-orange-glow);
+}
+
+.profile {
+    display: none;
+    border: 1px solid black;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-dark);
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined' !important;
+    font-variation-settings: 'wght' 600, 'opsz' 36;
+    color: var(--primary-orange);
+    text-shadow: 2px 2px 0px #000;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'liga';
+}
+
+.disclaimer-footer {
+    margin-top: auto;
+    width: 100%;
+    padding: 1.5rem;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid var(--border-dim);
+}
+
+.disclaimer-footer p {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+    margin: 0;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    letter-spacing: 0.3px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="file"] {
+    width: 100%;
+    padding: 1rem;
+    margin: 0.75rem 0;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: white;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px var(--primary-orange-glow);
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    color: white;
+    font-weight: 500;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 1.5rem;
+    font-family: 'Ninja Naruto', sans-serif;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
+
+.reg-theme button {
+    background: linear-gradient(135deg, var(--secondary-blue), #0077ff);
+    box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
+}
+
+.log-theme button {
+    background: linear-gradient(135deg, var(--primary-orange), #ff8c00);
+    box-shadow: 0 4px 15px var(--primary-orange-glow);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.logout-btn {
+    font-family: 'Ninja Naruto', sans-serif;
+    color: var(--text-dim);
+    text-decoration: none;
+    border: 1px solid var(--glass-border);
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: var(--accent-red);
+    color: white;
+    border-color: var(--accent-red);
+}

@@ -1,0 +1,33 @@
+<div class="game-card-container" data-card-id="<%= card.instanceId %>">
+    <div class="game-card-inner">
+        
+        <div class="game-card-front" style="background-image: url('/assets/cards/card_background.png');">
+            
+            <div class="card-nameplate">
+                <h2 class="card-character-name"><%= card.name %></h2>
+            </div>
+
+            <div class="card-parchment-area">
+                <img src="/assets/<%= card.image_path || 'default.png' %>" alt="<%= card.name %>" class="card-character-image">
+                
+                <div class="card-info">
+                    <span class="card-type"><%= card.type || 'Ninja' %></span>
+
+                    <% if (card.special_skill) { %>
+                        <div class="card-description"><%= card.special_skill %></div>
+                    <% } else { %>
+                        <div class="card-stats">
+                            <span>⚔️ <%= card.attack || 0 %></span>
+                            <span>🛡️ <%= card.defense || 0 %></span>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="game-card-back" style="background-image: url('/assets/cards/card_shirt.png');">
+            </div>
+
+    </div>
+</div>

@@ -1,0 +1,85 @@
+.lobby-container {
+    max-width: 1200px;
+    width: 90%;
+    margin: 3rem auto;
+    text-align: center;
+}
+
+.deck-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+    margin-top: 3rem;
+    justify-items: center;
+}
+
+.deck-card-wrapper {
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    padding: 1.5rem;
+}
+
+.deck-card-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 20px;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.deck-card-wrapper:hover {
+    transform: translateY(-20px) scale(1.05);
+}
+
+/* .deck-card-wrapper:hover::after {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 30px var(--primary-orange-glow), inset 0 0 20px rgba(255, 165, 0, 0.1);
+}
+
+.deck-card-wrapper.selected::after {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 40px var(--primary-orange-glow), inset 0 0 20px rgba(255, 165, 0, 0.15);
+} */
+
+.deck-card-wrapper .game-card-container {
+    position: relative;
+    z-index: 2;
+}
+
+#start-battle {
+    margin: 4rem auto;
+    padding: 1.25rem 4rem;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-orange), #ff4500);
+    color: white;
+    border-radius: 100px;
+    display: none;
+    width: auto;
+    animation: pulse 2s infinite;
+}
+
+.deck-card-wrapper .game-card-container:hover .game-card-inner {
+    transform: none !important;
+}
+
+.auth-container:not(.wooden)::before {
+    display: none;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 20px rgba(255, 69, 0, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 69, 0, 0);
+    }
+}

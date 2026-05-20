@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/modals.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/card.css">
+    <link rel="stylesheet" href="/css/lobby.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=cancel,close,edit,save">
+    <title>Naruto Mayhem - Lobby</title>
+</head>
+
+<body>
+    <div class="header">
+        <div class="user-info" id="openProfile">
+            <img src="/assets/avatars/<%= user.avatar %>" alt="Avatar" class="user-avatar">
+            <span>Welcome, <strong>
+                    <span id="display-nickname">
+                        <%= user.nickname || user.login %>
+                    </span>
+                </strong>
+                !</span>
+        </div>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+
+    <!-- Profile Modal -->
+    <%- include('partials/profile-modal') %>
+
+        <div class="lobby-container">
+            <h2>Choose your ninja</h2>
+            <div class="deck-selection">
+                <div class="deck-card-wrapper" onclick="selectDeck('barbarian_ninja', this)">
+                    <%- include('partials/game-card', { card: { instanceId: 'deck-barbarian' , name: 'Forth Raikage' ,
+                        image_path: 'heroes/fourth_raikage.png' , attack: 9, defense: 8, cost: 7,
+                        type: 'Lightning Titan' , special_skill: 'Power and defense' } }) %>
+                </div>
+
+                <div class="deck-card-wrapper" onclick="selectDeck('mage_ninja', this)">
+                    <%- include('partials/game-card', { card: { instanceId: 'deck-mage' , name: 'Orochimaru' ,
+                        image_path: 'heroes/orochimaru.png' , attack: 8, defense: 6, cost: 8, type: 'Snake Sannin' ,
+                        special_skill: 'Control and deceit' } }) %>
+                </div>
+
+                <div class="deck-card-wrapper" onclick="selectDeck('paladin_ninja', this)">
+                    <%- include('partials/game-card', { card: { instanceId: 'deck-paladin' , name: 'Sakura Haruno' ,
+                        image_path: 'heroes/sakura.png' , attack: 6, defense: 9, cost: 6, type: 'Medic-nin Master' ,
+                        special_skill: 'Heal and stamina' } }) %>
+                </div>
+
+                <div class="deck-card-wrapper" onclick="selectDeck('rogue_ninja', this)">
+                    <%- include('partials/game-card', { card: { instanceId: 'deck-rogue' , name: 'Naruto Uzumaki' ,
+                        image_path: 'heroes/naruto.png' , attack: 8, defense: 7, cost: 5, type: 'Nine-Tails Jinchuriki'
+                        , special_skill: 'Speed and clones' } }) %>
+                </div>
+            </div>
+
+            <form action="/game" method="GET">
+                <input type="hidden" name="deck" id="selected-deck-input">
+                <button type="submit" id="start-battle">FIGHT!</button>
+            </form>
+        </div>
+
+        <script src="/js/game-card.js"></script>
+        <script>
+            function selectDeck(deckType, element) {
+                document.querySelectorAll('.deck-card-wrapper').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                element.classList.add('selected');
+
+                const input = document.getElementById('selected-deck-input');
+                const btn = document.getElementById('start-battle');
+
+                input.value = deckType;
+                btn.style.display = 'block';
+
+                btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        </script>
+
+        <script src="partials/profile-modal.ejs"></script>
+</body>
+
+</html>
