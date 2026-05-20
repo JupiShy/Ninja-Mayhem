@@ -1,6 +1,36 @@
 # Ninja-Mayhem
 a shinobi browser game
 
+<div align="center" >
+  <h2>Characters</h2>
+  <table>
+    <tr>
+      <td align="center" style="width:100%">
+        <img src="public/assets/cards/sakura_rush.png" alt="Sakura" height="250"/><br/>
+        <b>Sakura</b><br/>
+        Paladin
+      </td>
+      <td align="center">
+        <img src="public/assets/cards/raikage_reflex.png" alt="4th Raikage" height="250"/><br/>
+        <b>4th Raikage</b><br/>
+        Barbarian
+      </td>
+      <td align="center">
+        <img src="public/assets/cards/orochimaru_fire.png" alt="Orochimaru" height="250"/><br/>
+        <b>Orochimaru</b><br/>
+        Mage
+      </td>
+      <td align="center">
+        <img src="public/assets/cards/naruto_guts.png" alt="Naruto" height="250"/><br/>
+        <b>Naruto</b><br/>
+        Rogue
+      </td>
+    </tr>
+  </table>
+</div>
+
+---
+
 ## Getting Started: Local Installation & Running the Game
 
 Follow these steps to set up and run Ninja-Mayhem on your computer:
@@ -63,3 +93,7 @@ http://localhost:3000
 - If the port is busy, check you don’t have another instance running.
 
 Enjoy playing Ninja-Mayhem locally!
+
+---
+
+***Disclaimer: This is a non-profit, fan-made project created for entertainment and educational purposes only. This game is not affiliated with, endorsed by, or sponsored by Shueisha, Studio Pierrot, or Bandai Namco Entertainment. All characters, names, and related imagery are trademarks and copyright of their respective owners. Support the official releases. No copyright infringement is intended.***
